@@ -11,11 +11,14 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   TouchableHighlight,
+  Dimensions,
 } from "react-native";
 import { ActivityIndicator, Keyboard } from "react-native";
 import { Image, Icon } from "react-native-elements";
 import { Input } from "react-native-elements";
 import { fetchMovies, setIDMovie } from "../redux/actions/movies";
+const windowHeight = Dimensions.get("window").height;
+const windowWidth = Dimensions.get("window").width;
 import GestureRecognizer, {
   swipeDirections,
 } from "react-native-swipe-gestures";
@@ -112,7 +115,12 @@ export default function Main({ navigation }) {
                 >
                   <Image
                     source={{ uri: elem.Poster }}
-                    style={{ width: 300, height: 500, marginBottom: 50 }}
+                    style={{
+                      width: windowWidth * 0.7,
+                      height: windowHeight * 0.75,
+                      marginBottom: 50,
+                      resizeMode: "contain",
+                    }}
                     PlaceholderContent={<ActivityIndicator />}
                   />
                 </TouchableOpacity>

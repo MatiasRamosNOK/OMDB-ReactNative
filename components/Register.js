@@ -18,12 +18,13 @@ const windowHeight = Dimensions.get("window").height;
 const windowWidth = Dimensions.get("window").width;
 
 export default function Login({ navigation }) {
-  const failRegistration = useSelector((store) => store.register.fail);
+  const failRegistration = useSelector((store) => store.register.error);
   const succesfulRegister = useSelector((store) => store.register.succesfull);
   console.log("Fail", failRegistration, " Success:", succesfulRegister);
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [waiting, setWaiting] = React.useState(false);
+  const [errorEmail, setErrorEmail] = React.useState("");
   const dispatch = useDispatch();
   const twoButtonsAlert = () => {
     Alert.alert(
@@ -60,7 +61,13 @@ export default function Login({ navigation }) {
       return emailAlert();
     } else if (password == "") {
       return passwordAlert();
+    } else if (
+      !email.includes("@") ||
+      !email.slice(email.indexOf("@"), email.length).includes(".")
+    ) {
+      setErrorEmail("Email is not valid");
     } else {
+      setErrorEmail("");
       setWaiting(true);
       dispatch(
         registerUser({ email: email.toLocaleLowerCase(), password: password })
@@ -69,12 +76,16 @@ export default function Login({ navigation }) {
   };
 
   useEffect(() => {
+    if (failRegistration == "EmailUsed") {
+      setWaiting(false);
+      setErrorEmail("Email already in use");
+    }
     if (succesfulRegister) {
       console.log("Entro al if afuera del useEffect2");
       setWaiting(false);
       navigation.navigate("Login");
     }
-  }, [succesfulRegister]);
+  }, [succesfulRegister, failRegistration]);
 
   return (
     <View style={styles.root}>
@@ -96,6 +107,7 @@ export default function Login({ navigation }) {
               style={styles}
               onChangeText={(value) => setEmail(value)}
               inputStyle={styles.textInput}
+              errorMessage={errorEmail}
             />
           </View>
           <View style={styles.password}>
@@ -152,9 +164,11 @@ const styles = StyleSheet.create({
   },
   email: {
     width: windowWidth * 0.9,
+    marginBottom: 10,
   },
   password: {
     width: windowWidth * 0.9,
+    marginBottom: 10,
   },
   textEmail: {
     marginLeft: 10,

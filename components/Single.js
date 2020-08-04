@@ -14,6 +14,7 @@ import { fetchMovie, resetMovie } from "../redux/actions/movies";
 import { addFavorite } from "../redux/actions/login";
 import { ActivityIndicator, Keyboard, Dimensions } from "react-native";
 const windowHeight = Dimensions.get("window").height;
+const windowWidth = Dimensions.get("window").width;
 export default function Single() {
   const IDmovie = useSelector((store) => store.movies.id);
   const movie = useSelector((store) => store.movies.movie);
@@ -32,11 +33,18 @@ export default function Single() {
           <View style={styles.rootContainer}>
             <Image
               source={{ uri: movie.Poster }}
-              style={{ width: 300, height: 500, marginBottom: 50 }}
+              style={{
+                width: windowWidth * 0.7,
+                height: windowHeight * 0.75,
+                marginBottom: 15,
+                resizeMode: "contain",
+              }}
               PlaceholderContent={<ActivityIndicator />}
             />
 
-            {loginStatus && !dataUser.moviesID.includes(movie.imdbID) ? (
+            {loginStatus &&
+            Object.keys(dataUser).includes("moviesID") &&
+            !dataUser.moviesID.includes(movie.imdbID) ? (
               <View style={styles.buttonContainer}>
                 <Button
                   info

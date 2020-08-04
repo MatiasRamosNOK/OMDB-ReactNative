@@ -4,7 +4,9 @@ import {
   LOGOUT,
   ADD_MOVIE_FAVORITE,
   REMOVE_MOVIE,
+  RESET_SUCCESFULL,
 } from "../constants";
+import { setSuccesfullNull } from "./register";
 
 const login = function (data, succesfull) {
   return {
@@ -17,6 +19,12 @@ const login = function (data, succesfull) {
 const logout = function () {
   return {
     type: LOGOUT,
+  };
+};
+
+const setSuccesfullNullLogin = function () {
+  return {
+    type: RESET_SUCCESFULL,
   };
 };
 
@@ -94,7 +102,7 @@ export const logginUser = function ({ email, password }) {
       })
       .catch(function (error) {
         console.log("Si hay un error:", error);
-        dispatch(login({}, false));
+        dispatch(login({ moviesID: [] }, false));
       });
   };
 };
@@ -102,5 +110,11 @@ export const logginUser = function ({ email, password }) {
 export const logoutUser = function () {
   return function (dispatch) {
     dispatch(logout());
+  };
+};
+
+export const resetSuccesfull = function () {
+  return function (dispatch) {
+    dispatch(setSuccesfullNullLogin());
   };
 };

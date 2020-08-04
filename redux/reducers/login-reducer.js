@@ -3,6 +3,7 @@ import {
   LOGOUT,
   ADD_MOVIE_FAVORITE,
   REMOVE_MOVIE,
+  RESET_SUCCESFULL,
 } from "../constants";
 
 const inicialState = {
@@ -22,6 +23,8 @@ export default function reducer(state = inicialState, action) {
       return { ...state, data: { moviesID: [] }, succesfull: null };
     case ADD_MOVIE_FAVORITE:
       return { ...state, data: action.data };
+    case RESET_SUCCESFULL:
+      return { ...state, succesfull: null };
     case REMOVE_MOVIE:
       console.log("Remove reducer:", action);
       return { ...state, data: action.data };

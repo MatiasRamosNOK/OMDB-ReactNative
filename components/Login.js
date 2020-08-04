@@ -8,6 +8,7 @@ import {
   SafeAreaView,
   Image,
 } from "react-native";
+import { setSuccesfullNull } from "../redux/actions/register";
 import { Spinner } from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { Button } from "react-native-elements";
@@ -15,14 +16,17 @@ import { Input } from "react-native-elements";
 import { useSelector, useDispatch } from "react-redux";
 import { logginUser } from "../redux/actions/login";
 import { set } from "react-native-reanimated";
+import { resetSuccesfull } from "../redux/actions/login";
 const windowHeight = Dimensions.get("window").height;
 const windowWidth = Dimensions.get("window").width;
 export default function Login({ navigation }) {
+  const succesfulRegister = useSelector((store) => store.register.succesfull);
   const registration = useSelector((store) => store.register.succesfull);
   const loginStatus = useSelector((store) => store.login.succesfull);
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [waiting, setWaiting] = React.useState(false);
+  const [errorEmail, setErrorEmail] = React.useState("");
   const dispatch = useDispatch();
   const twoButtonsAlert = () => {
     Alert.alert(
@@ -68,6 +72,11 @@ export default function Login({ navigation }) {
       return emailAlert();
     } else if (password == "") {
       return passwordAlert();
+    } else if (
+      !email.includes("@") ||
+      !email.slice(email.indexOf("@"), email.length).includes(".")
+    ) {
+      setErrorEmail("Email is not valid");
     } else {
       setWaiting(true);
       dispatch(
@@ -75,6 +84,10 @@ export default function Login({ navigation }) {
       );
     }
   };
+
+  if (succesfulRegister) {
+    dispatch(setSuccesfullNull());
+  }
 
   useEffect(() => {
     if (loginStatus) {
@@ -85,6 +98,7 @@ export default function Login({ navigation }) {
         setWaiting(false);
         setEmail("");
         setPassword("");
+        dispatch(resetSuccesfull());
         return loginFail();
       }
     }
@@ -116,6 +130,7 @@ export default function Login({ navigation }) {
                   style={styles}
                   onChangeText={(value) => setEmail(value)}
                   inputStyle={styles.textInput}
+                  errorMessage={errorEmail}
                 />
               </View>
               <View style={styles.password}>
@@ -142,15 +157,14 @@ export default function Login({ navigation }) {
                     checkData();
                   }}
                 />
-                {registration ? null : (
-                  <Button
-                    title="Register"
-                    buttonStyle={styles.button}
-                    onPress={() => {
-                      navigation.navigate("Register");
-                    }}
-                  />
-                )}
+
+                <Button
+                  title="Register"
+                  buttonStyle={styles.button}
+                  onPress={() => {
+                    navigation.navigate("Register");
+                  }}
+                />
               </View>
             </View>
           )}
