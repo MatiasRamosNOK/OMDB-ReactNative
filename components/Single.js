@@ -48,7 +48,7 @@ export default function Single() {
               <View style={styles.buttonContainer}>
                 <Button
                   info
-                  small
+                  large
                   onPress={() => {
                     dispatch(addFavorite(dataUser.id, movie.imdbID));
                   }}
@@ -60,8 +60,8 @@ export default function Single() {
 
             {dataUser.moviesID.includes(movie.imdbID) ? (
               <View style={styles.buttonContainer}>
-                <Button block success>
-                  <Text style={styles.buttonDone}>Success</Text>
+                <Button large success>
+                  <Text style={styles.textButton}>Success</Text>
                 </Button>
               </View>
             ) : null}
@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 10,
-    width: 100,
+    flex: 1,
   },
   rootContainer: {
     height: "100%",

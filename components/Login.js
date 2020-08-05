@@ -121,6 +121,7 @@ export default function Login({ navigation }) {
                 ) : null}
                 <Text style={styles.textEmail}>Email</Text>
                 <Input
+                  placeholderTextColor={"gray"}
                   placeholder="abc@example.com"
                   leftIcon={{
                     type: "font-awesome",
@@ -136,6 +137,7 @@ export default function Login({ navigation }) {
               <View style={styles.password}>
                 <Text style={styles.textPassword}>Password</Text>
                 <Input
+                  placeholderTextColor={"gray"}
                   placeholder="Som3th1n!gS3c-re"
                   leftIcon={{
                     marginLeft: 6,

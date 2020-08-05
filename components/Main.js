@@ -19,9 +19,6 @@ import { Input } from "react-native-elements";
 import { fetchMovies, setIDMovie } from "../redux/actions/movies";
 const windowHeight = Dimensions.get("window").height;
 const windowWidth = Dimensions.get("window").width;
-import GestureRecognizer, {
-  swipeDirections,
-} from "react-native-swipe-gestures";
 export default function Main({ navigation }) {
   const movies = useSelector((store) => store.movies);
   const loginStatus = useSelector((store) => store.login.succesfull);
@@ -40,98 +37,55 @@ export default function Main({ navigation }) {
     navigation.navigate("Single", { title: elem.Title });
   };
 
-  const config = {
-    velocityThreshold: 0.3,
-    directionalOffsetThreshold: 80,
-  };
-
-  function onSwipe(gestureName, gestureState) {
-    const { SWIPE_UP, SWIPE_DOWN, SWIPE_LEFT, SWIPE_RIGHT } = swipeDirections;
-    switch (gestureName) {
-      case SWIPE_UP:
-        console.log("SWipe up");
-
-        break;
-      case SWIPE_DOWN:
-        console.log("SWipe down");
-
-        break;
-      case SWIPE_LEFT:
-        console.log("Entro en swipe left");
-        console.log("Login status:", loginStatus);
-        if (loginStatus) {
-          navigation.navigate("User");
-        } else {
-          navigation.navigate("Login");
-        }
-        break;
-      case SWIPE_RIGHT:
-        console.log("SWipe right");
-        break;
-    }
-  }
-
-  useEffect(() => {
-    // cleanup function
-  }, [movies.movies.Search]);
+  useEffect(() => {}, [movies.movies.Search]);
 
   return (
-    <GestureRecognizer
-      onSwipe={(direction, state) => {
-        onSwipe(direction, state);
-      }}
-      config={config}
-      style={{
-        flex: 1,
-      }}
-    >
-      <SafeAreaView style={styles.root}>
-        <View style={styles.inputUser}>
-          <Input
-            placeholder="Movie"
-            onChange={(e) => {
-              setName(e.nativeEvent.text);
-            }}
-            inputStyle={styles.input}
-            rightIcon={
-              <Icon
-                name="search"
-                size={30}
-                onPress={lookInfo}
-                color={"white"}
-              />
+    <SafeAreaView style={styles.root}>
+      <View style={styles.inputUser}>
+        <Input
+          onSubmitEditing={() => {
+            if (name != "") {
+              dispatch(fetchMovies(name));
             }
-          />
-        </View>
+          }}
+          placeholderTextColor={"gray"}
+          placeholder="Movie"
+          onChange={(e) => {
+            setName(e.nativeEvent.text);
+          }}
+          inputStyle={styles.input}
+          rightIcon={
+            <Icon name="search" size={30} onPress={lookInfo} color={"white"} />
+          }
+        />
+      </View>
 
-        <ScrollView contentContainerStyle={styles.containerImages}>
-          {movies.movies.Search &&
-            movies.movies.Search.map((elem) => {
-              return (
-                <TouchableOpacity
-                  key={elem.imdbID}
-                  activeOpacity={1}
-                  onPress={() => goToSingle(elem)}
-                >
-                  <Image
-                    source={{ uri: elem.Poster }}
-                    style={{
-                      width: windowWidth * 0.7,
-                      height: windowHeight * 0.75,
-                      marginBottom: 50,
-                      resizeMode: "contain",
-                    }}
-                    PlaceholderContent={<ActivityIndicator />}
-                  />
-                </TouchableOpacity>
-              );
-            })}
-          {movies.movies.Response == "False" ? (
-            <Text style={styles.error}>Hey we didn't found anything</Text>
-          ) : null}
-        </ScrollView>
-      </SafeAreaView>
-    </GestureRecognizer>
+      <ScrollView contentContainerStyle={styles.containerImages}>
+        {movies.movies.Search &&
+          movies.movies.Search.map((elem) => {
+            return (
+              <TouchableOpacity
+                key={elem.imdbID}
+                activeOpacity={1}
+                onPress={() => goToSingle(elem)}
+              >
+                <Image
+                  source={{ uri: elem.Poster }}
+                  style={{
+                    width: windowWidth * 0.7,
+                    height: windowHeight * 0.7,
+                    marginBottom: 50,
+                  }}
+                  PlaceholderContent={<ActivityIndicator />}
+                />
+              </TouchableOpacity>
+            );
+          })}
+        {movies.movies.Response == "False" ? (
+          <Text style={styles.error}>Hey we didn't found anything</Text>
+        ) : null}
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
