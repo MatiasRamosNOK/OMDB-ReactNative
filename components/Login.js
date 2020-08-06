@@ -85,10 +85,6 @@ export default function Login({ navigation }) {
     }
   };
 
-  if (succesfulRegister) {
-    dispatch(setSuccesfullNull());
-  }
-
   useEffect(() => {
     if (loginStatus) {
       navigation.navigate("Home");
@@ -164,6 +160,9 @@ export default function Login({ navigation }) {
                   title="Register"
                   buttonStyle={styles.button}
                   onPress={() => {
+                    if (succesfulRegister) {
+                      dispatch(setSuccesfullNull());
+                    }
                     navigation.navigate("Register");
                   }}
                 />

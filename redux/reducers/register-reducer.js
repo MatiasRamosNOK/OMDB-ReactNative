@@ -12,8 +12,9 @@ export default function reducer(state = inicialState, action) {
       return { ...state, succesfull: false };
     }
     case REGISTER_USER:
-      console.log("Entro al reducer con:", action);
-      return { ...state, succesfull: action.succesfull, error: action.error };
+      console.log("Entro al reducer con n2:", action);
+      let valor = action.succesfull;
+      return { ...state, succesfull: valor, error: action.error };
     default:
       return state;
   }

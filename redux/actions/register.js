@@ -24,12 +24,9 @@ export const registerUser = function ({ email, password }) {
         password: password,
       })
       .then(function (response) {
-        console.log("Entro al then");
         if (response.status == 200) {
-          console.log("Entro al if");
+          console.log("Entro al if con:", response);
           dispatch(register(true, null));
-        } else if (response.status == 205) {
-          console.log("Entro al else if");
         }
       })
       .catch(function (error) {
