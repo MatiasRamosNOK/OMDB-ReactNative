@@ -6,11 +6,7 @@ import {
   Text,
   SafeAreaView,
   ScrollView,
-  Pressable,
-  SectionList,
   TouchableOpacity,
-  TouchableWithoutFeedback,
-  TouchableHighlight,
   Dimensions,
 } from "react-native";
 import { ActivityIndicator, Keyboard } from "react-native";
@@ -21,7 +17,6 @@ const windowHeight = Dimensions.get("window").height;
 const windowWidth = Dimensions.get("window").width;
 export default function Main({ navigation }) {
   const movies = useSelector((store) => store.movies);
-  const loginStatus = useSelector((store) => store.login.succesfull);
   const [name, setName] = React.useState("");
 
   const dispatch = useDispatch();

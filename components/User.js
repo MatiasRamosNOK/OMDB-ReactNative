@@ -15,6 +15,9 @@ import {
   Icon,
   Container,
   Content,
+  Tab,
+  Tabs,
+  TabHeading,
 } from "native-base";
 import { Image } from "react-native-elements";
 import { getMovies } from "../redux/actions/movies";
@@ -28,6 +31,7 @@ export default function User({ navigation }) {
   const data = useSelector((store) => store.login.data);
   const movies = useSelector((store) => store.movies.moviesUser);
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(getMovies(Array.from(new Set(data.moviesID))));
   }, [movies.length, data.moviesID.length]);

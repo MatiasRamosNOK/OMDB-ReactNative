@@ -13,6 +13,8 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { Icon } from "native-base";
 import { enableScreens } from "react-native-screens";
 import { logoutUser } from "./redux/actions/login";
+import Logout from "./components/Logout";
+import WhereTo from "./components/WhereTo";
 enableScreens();
 let store = storeConfiguration();
 const Stack = createStackNavigator();
@@ -25,21 +27,9 @@ export default function App() {
           <Stack.Screen
             name="Home"
             component={Main}
-            options={({ navigation, route }) => ({
-              headerRight: (props) => {
-                return (
-                  <Icon
-                    name="person"
-                    style={{ marginRight: 10 }}
-                    onPress={(e) => {
-                      if (store.getState().login.succesfull) {
-                        navigation.navigate("User");
-                      } else {
-                        navigation.navigate("Login");
-                      }
-                    }}
-                  />
-                );
+            options={() => ({
+              headerRight: () => {
+                return <WhereTo />;
               },
             })}
           />
@@ -53,18 +43,9 @@ export default function App() {
           <Stack.Screen
             name="User"
             component={User}
-            options={({ navigation, route }) => ({
-              headerRight: (props) => {
-                return (
-                  <Icon
-                    name="exit"
-                    style={{ marginRight: 10 }}
-                    onPress={(e) => {
-                      store.dispatch(logoutUser());
-                      navigation.goBack();
-                    }}
-                  />
-                );
+            options={() => ({
+              headerRight: () => {
+                return <Logout />;
               },
             })}
           />

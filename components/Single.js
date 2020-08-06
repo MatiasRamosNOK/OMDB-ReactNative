@@ -27,63 +27,60 @@ export default function Single() {
     dispatch(fetchMovie(IDmovie));
   }, [movie.length, IDmovie]);
   return (
-    <ScrollView>
-      <View style={styles.root}>
-        {movie.imdbID == IDmovie && movie && Object.keys(movie).length ? (
-          <View style={styles.rootContainer}>
-            <Image
-              source={{ uri: movie.Poster }}
-              style={{
-                width: windowWidth * 0.7,
-                height: windowHeight * 0.75,
-                marginBottom: 15,
-                resizeMode: "contain",
-              }}
-              PlaceholderContent={<ActivityIndicator />}
-            />
+    <SafeAreaView>
+      <ScrollView>
+        <View style={styles.root}>
+          {movie.imdbID == IDmovie && movie && Object.keys(movie).length ? (
+            <View style={styles.rootContainer}>
+              <Image
+                source={{ uri: movie.Poster }}
+                style={styles.imagen}
+                PlaceholderContent={<ActivityIndicator />}
+              />
 
-            {loginStatus &&
-            Object.keys(dataUser).includes("moviesID") &&
-            !dataUser.moviesID.includes(movie.imdbID) ? (
-              <View style={styles.buttonContainer}>
-                <Button
-                  info
-                  large
-                  onPress={() => {
-                    dispatch(addFavorite(dataUser.id, movie.imdbID));
-                  }}
-                >
-                  <Text style={styles.textButton}> Add to favorite </Text>
-                </Button>
-              </View>
-            ) : null}
+              {loginStatus &&
+              Object.keys(dataUser).includes("moviesID") &&
+              !dataUser.moviesID.includes(movie.imdbID) ? (
+                <View style={styles.buttonContainer}>
+                  <Button
+                    info
+                    full
+                    onPress={() => {
+                      dispatch(addFavorite(dataUser.id, movie.imdbID));
+                    }}
+                  >
+                    <Text style={styles.textButton}> Add to favorite </Text>
+                  </Button>
+                </View>
+              ) : null}
 
-            {dataUser.moviesID.includes(movie.imdbID) ? (
-              <View style={styles.buttonContainer}>
-                <Button large success>
-                  <Text style={styles.textButton}>Success</Text>
-                </Button>
-              </View>
-            ) : null}
+              {dataUser.moviesID.includes(movie.imdbID) ? (
+                <View style={styles.buttonContainer}>
+                  <Button full success>
+                    <Text style={styles.textButton}>Success</Text>
+                  </Button>
+                </View>
+              ) : null}
 
-            {Object.keys(movie).map(function (key, index) {
-              if (key != "Poster" && key != "Ratings" && key != "Response") {
-                return (
-                  <View style={styles.contenedorInfo} key={index}>
-                    <Text style={styles.infoTitle}>{key.toString()}</Text>
-                    <Text style={styles.info}>{movie[key].toString()}</Text>
-                  </View>
-                );
-              }
-            })}
-          </View>
-        ) : (
-          <View style={styles.waitingContainer}>
-            <Spinner color="blue" />
-          </View>
-        )}
-      </View>
-    </ScrollView>
+              {Object.keys(movie).map(function (key, index) {
+                if (key != "Poster" && key != "Ratings" && key != "Response") {
+                  return (
+                    <View style={styles.contenedorInfo} key={index}>
+                      <Text style={styles.infoTitle}>{key.toString()}</Text>
+                      <Text style={styles.info}>{movie[key].toString()}</Text>
+                    </View>
+                  );
+                }
+              })}
+            </View>
+          ) : (
+            <View style={styles.waitingContainer}>
+              <Spinner color="blue" />
+            </View>
+          )}
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
@@ -94,7 +91,17 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  buttonFavorite: {
+    height: 10,
+  },
+  imagen: {
+    width: windowWidth * 0.7,
+    height: windowHeight * 0.5,
+    marginBottom: 15,
+    resizeMode: "stretch",
+  },
   buttonContainer: {
+    width: windowWidth / 2,
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 10,
