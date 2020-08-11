@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
   },
   imagen: {
     width: windowWidth * 0.7,
-    height: windowHeight * 0.5,
+    height: windowHeight * 0.6,
     marginBottom: 15,
     resizeMode: "stretch",
   },
@@ -128,8 +128,8 @@ const styles = StyleSheet.create({
     color: "white",
   },
   contenedorInfo: {
-    marginLeft: 5,
-    marginRight: 5,
+    marginLeft: 10,
+    marginRight: 10,
     justifyContent: "center",
     alignItems: "center",
   },

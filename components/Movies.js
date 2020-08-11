@@ -33,97 +33,64 @@ export default function Movies({ navigation }) {
     dispatch(getMovies(Array.from(new Set(data.moviesID))));
   }, [movies.length, data.moviesID.length]);
 
-  const config = {
-    velocityThreshold: 0.3,
-    directionalOffsetThreshold: 80,
-  };
-
-  function onSwipe(gestureName, gestureState) {
-    const { SWIPE_UP, SWIPE_DOWN, SWIPE_LEFT, SWIPE_RIGHT } = swipeDirections;
-    switch (gestureName) {
-      case SWIPE_UP:
-        console.log("SWipe up");
-
-        break;
-      case SWIPE_DOWN:
-        console.log("SWipe down");
-
-        break;
-      case SWIPE_LEFT:
-        break;
-      case SWIPE_RIGHT:
-        navigation.navigate("User");
-        break;
-    }
-  }
   return (
-    <GestureRecognizer
-      onSwipe={(direction, state) => {
-        onSwipe(direction, state);
-      }}
-      config={config}
-      style={{
-        flex: 1,
-      }}
-    >
-      <Container>
-        <Content style={styles.container}>
-          <ScrollView>
-            <View style={styles.root}>
-              {movies.length == 0 ? (
-                <View style={styles.empty}>
-                  <Text style={styles.textDelete}>
-                    Empty: Add something first
-                  </Text>
-                </View>
-              ) : null}
-              {movies &&
-                movies.map((movie, index) => {
-                  return (
-                    <TouchableOpacity key={index} activeOpacity={1}>
-                      <Image
-                        source={{ uri: `${movie.Poster}` }}
-                        style={{
-                          width: windowWidth * 0.7,
-                          height: windowHeight * 0.7,
-                          resizeMode: "contain",
-                        }}
-                      />
-                      <Button
-                        block
-                        danger
-                        style={{ marginBottom: 30 }}
-                        onPress={() => {
-                          dispatch(deleteFavorite(data.id, movie.imdbID));
-                        }}
-                      >
-                        <Text style={styles.textDelete}>Delete</Text>
-                      </Button>
-                    </TouchableOpacity>
-                  );
-                })}
-            </View>
-          </ScrollView>
-        </Content>
-        <Footer>
-          <FooterTab>
-            <Button
-              vertical
-              onPress={() => {
-                navigation.navigate("User");
-              }}
-            >
-              <Icon name="person" />
-              <Text style={styles.text}>Profile</Text>
-            </Button>
-            <Button vertical active>
-              <Icon active name="easel" />
-              <Text style={styles.text}>Movies</Text>
-            </Button>
-          </FooterTab>
-        </Footer>
-      </Container>
-    </GestureRecognizer>
+    <Container>
+      <Content style={styles.container}>
+        <ScrollView>
+          <View style={styles.root}>
+            {movies.length == 0 ? (
+              <View style={styles.empty}>
+                <Text style={styles.textDelete}>
+                  Empty: Add something first
+                </Text>
+              </View>
+            ) : null}
+            {movies &&
+              movies.map((movie, index) => {
+                return (
+                  <TouchableOpacity key={index} activeOpacity={1}>
+                    <Image
+                      source={{ uri: `${movie.Poster}` }}
+                      style={{
+                        width: windowWidth * 0.7,
+                        height: windowHeight * 0.7,
+                        resizeMode: "contain",
+                      }}
+                    />
+                    <Button
+                      block
+                      danger
+                      style={{ marginBottom: 30 }}
+                      onPress={() => {
+                        dispatch(deleteFavorite(data.id, movie.imdbID));
+                      }}
+                    >
+                      <Text style={styles.textDelete}>Delete</Text>
+                    </Button>
+                  </TouchableOpacity>
+                );
+              })}
+          </View>
+        </ScrollView>
+      </Content>
+      <Footer>
+        <FooterTab>
+          <Button
+            vertical
+            onPress={() => {
+              navigation.navigate("User");
+            }}
+          >
+            <Icon name="person" />
+            <Text style={styles.text}>Profile</Text>
+          </Button>
+          <Button vertical active>
+            <Icon active name="easel" />
+            <Text style={styles.text}>Movies</Text>
+          </Button>
+        </FooterTab>
+      </Footer>
+    </Container>
   );
 }
 

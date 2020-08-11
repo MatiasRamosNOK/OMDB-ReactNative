@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import background from "../assets/login.jpg";
 import { ActivityIndicator, Keyboard, Dimensions, Alert } from "react-native";
 import {
   StyleSheet,
@@ -7,10 +8,12 @@ import {
   ScrollView,
   SafeAreaView,
   Image,
+  ImageBackground,
 } from "react-native";
 import { setSuccesfullNull } from "../redux/actions/register";
 import { Spinner } from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome";
+import GradientButton from "react-native-gradient-buttons";
 import { Button } from "react-native-elements";
 import { Input } from "react-native-elements";
 import { useSelector, useDispatch } from "react-redux";
@@ -101,81 +104,108 @@ export default function Login({ navigation }) {
   }, [loginStatus]);
   return (
     <View style={styles.root}>
-      {waiting ? (
-        <View>
-          <Spinner color="blue" />
-        </View>
-      ) : (
-        <View>
-          {loginStatus ? null : (
-            <View>
-              <View style={styles.email}>
-                {registration ? (
-                  <Text style={styles.textCredentials}>
-                    Please log in with your credentials
-                  </Text>
-                ) : null}
-                <Text style={styles.textEmail}>Email</Text>
-                <Input
-                  placeholderTextColor={"gray"}
-                  placeholder="abc@example.com"
-                  leftIcon={{
-                    type: "font-awesome",
-                    name: "envelope",
-                    color: "white",
-                  }}
-                  style={styles}
-                  onChangeText={(value) => setEmail(value)}
-                  inputStyle={styles.textInput}
-                  errorMessage={errorEmail}
-                />
+      <ImageBackground source={background} style={styles.backgroundImage}>
+        {waiting ? (
+          <View>
+            <Spinner color="blue" />
+          </View>
+        ) : (
+          <View>
+            {loginStatus ? null : (
+              <View style={styles.containerInfo}>
+                <View style={styles.email}>
+                  {registration ? (
+                    <Text style={styles.textCredentials}>
+                      Please log in with your credentials
+                    </Text>
+                  ) : null}
+                  <Text style={styles.textEmail}>Email</Text>
+                  <Input
+                    placeholderTextColor={"gray"}
+                    placeholder="abc@example.com"
+                    leftIcon={{
+                      type: "font-awesome",
+                      name: "envelope",
+                      color: "white",
+                    }}
+                    style={styles}
+                    onChangeText={(value) => setEmail(value)}
+                    inputStyle={styles.textInput}
+                    errorMessage={errorEmail}
+                  />
+                </View>
+                <View style={styles.password}>
+                  <Text style={styles.textPassword}>Password</Text>
+                  <Input
+                    placeholderTextColor={"gray"}
+                    placeholder="Som3th1n!gS3c-re"
+                    leftIcon={{
+                      marginLeft: 6,
+                      type: "font-awesome",
+                      name: "lock",
+                      color: "white",
+                      marginRight: 4,
+                    }}
+                    inputStyle={styles.textInput}
+                    onChangeText={(value) => setPassword(value)}
+                    secureTextEntry={true}
+                  />
+                </View>
               </View>
-              <View style={styles.password}>
-                <Text style={styles.textPassword}>Password</Text>
-                <Input
-                  placeholderTextColor={"gray"}
-                  placeholder="Som3th1n!gS3c-re"
-                  leftIcon={{
-                    marginLeft: 6,
-                    type: "font-awesome",
-                    name: "lock",
-                    color: "white",
-                    marginRight: 4,
-                  }}
-                  inputStyle={styles.textInput}
-                  onChangeText={(value) => setPassword(value)}
-                  secureTextEntry={true}
-                />
-              </View>
-              <View style={styles.contenedorBotones}>
-                <Button
-                  title="Login"
-                  buttonStyle={styles.button}
-                  onPress={() => {
-                    checkData();
-                  }}
-                />
+            )}
+            <View style={styles.contenedorBotones}>
+              <GradientButton
+                style={styles.button}
+                text="Login"
+                textStyle={{ fontSize: 20 }}
+                gradientBegin="#217CA9"
+                gradientEnd="#130C67"
+                height={60}
+                width={windowWidth * 0.8}
+                radius={15}
+                impact
+                impactStyle="Light"
+                onPressAction={() => checkData()}
+              />
 
-                <Button
-                  title="Register"
-                  buttonStyle={styles.button}
-                  onPress={() => {
-                    if (succesfulRegister) {
-                      dispatch(setSuccesfullNull());
-                    }
-                    navigation.navigate("Register");
-                  }}
-                />
-              </View>
+              <Text style={{ color: "black", fontSize: 20, marginBottom: 10 }}>
+                or
+              </Text>
+
+              <GradientButton
+                style={styles.button}
+                text="Register"
+                textStyle={{ fontSize: 20 }}
+                gradientBegin="#217CA9"
+                gradientEnd="#130C67"
+                height={60}
+                width={windowWidth * 0.8}
+                radius={15}
+                impact
+                impactStyle="Light"
+                onPressAction={() => {
+                  if (succesfulRegister) {
+                    dispatch(setSuccesfullNull());
+                  }
+                  navigation.navigate("Register");
+                }}
+              />
             </View>
-          )}
-        </View>
-      )}
+          </View>
+        )}
+      </ImageBackground>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  containerInfo: {
+    marginTop: 150,
+    opacity: 0.9,
+    borderRadius: 10,
+    width: windowWidth * 0.9,
+    backgroundColor: "#0D0B0F",
+  },
   root: {
     flex: 1,
     justifyContent: "center",
@@ -184,25 +214,30 @@ const styles = StyleSheet.create({
   },
   contenedorBotones: {
     marginTop: 10,
-    width: windowWidth * 0.9,
     display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: "column",
     alignItems: "center",
   },
   button: {
+    marginBottom: 10,
     marginLeft: 5,
     marginRight: 5,
-    width: 100,
-    height: 40,
   },
   email: {
+    marginTop: 10,
     width: windowWidth * 0.9,
+  },
+  backgroundImage: {
+    flex: 1,
+    width: windowWidth,
+    justifyContent: "center",
+    alignItems: "center",
   },
   password: {
     width: windowWidth * 0.9,
   },
   textEmail: {
+    width: windowWidth * 0.8,
     marginLeft: 10,
     fontSize: 18,
     color: "lightblue",

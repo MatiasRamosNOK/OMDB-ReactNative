@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import * as Animatable from "react-native-animatable";
 import { useDispatch, useSelector } from "react-redux";
 import {
   StyleSheet,
@@ -8,7 +9,10 @@ import {
   ScrollView,
   TouchableOpacity,
   Dimensions,
+  Button,
 } from "react-native";
+import FlashMessage from "react-native-flash-message";
+import { showMessage, hideMessage } from "react-native-flash-message";
 import { ActivityIndicator, Keyboard } from "react-native";
 import { Image, Icon } from "react-native-elements";
 import { Input } from "react-native-elements";
@@ -16,9 +20,13 @@ import { fetchMovies, setIDMovie } from "../redux/actions/movies";
 const windowHeight = Dimensions.get("window").height;
 const windowWidth = Dimensions.get("window").width;
 export default function Main({ navigation }) {
+  const store = useSelector((store) => store);
+  const login = useSelector((store) => store.login.succesfull);
   const movies = useSelector((store) => store.movies);
+  const [showWelcome, setShowWelcome] = React.useState(true);
   const [name, setName] = React.useState("");
-
+  const [hideInput, setHideInput] = React.useState(null);
+  const [animationEnd, setAnimationEnd] = React.useState(null);
   const dispatch = useDispatch();
   const lookInfo = () => {
     if (name != "") {
@@ -27,16 +35,40 @@ export default function Main({ navigation }) {
     }
   };
 
+  const scrollStart = (e) => {
+    if (e.nativeEvent.contentOffset.y > 100) {
+      setHideInput(true);
+    }
+    if (e.nativeEvent.contentOffset.y <= 100) {
+      setHideInput(false);
+    }
+  };
+
   const goToSingle = (elem) => {
     dispatch(setIDMovie(elem.imdbID));
     navigation.navigate("Single", { title: elem.Title });
   };
 
-  useEffect(() => {}, [movies.movies.Search]);
+  useEffect(() => {
+    if (login && showWelcome) {
+      showMessage({
+        message: "Hello",
+        description: "You are loggin now",
+        type: "success",
+      });
+      setShowWelcome(false);
+    }
+    if (login == null) {
+      setShowWelcome(true);
+    }
+  }, [movies.movies.Search, login]);
 
   return (
     <SafeAreaView style={styles.root}>
-      <View style={styles.inputUser}>
+      <ScrollView
+        contentContainerStyle={styles.containerImages}
+        onScroll={scrollStart}
+      >
         <Input
           onSubmitEditing={() => {
             if (name != "") {
@@ -53,9 +85,7 @@ export default function Main({ navigation }) {
             <Icon name="search" size={30} onPress={lookInfo} color={"white"} />
           }
         />
-      </View>
 
-      <ScrollView contentContainerStyle={styles.containerImages}>
         {movies.movies.Search &&
           movies.movies.Search.map((elem) => {
             return (
@@ -68,24 +98,40 @@ export default function Main({ navigation }) {
                   source={{ uri: elem.Poster }}
                   style={{
                     width: windowWidth * 0.7,
-                    height: windowHeight * 0.7,
+                    height: windowHeight * 0.6,
                     marginBottom: 50,
+                    resizeMode: "stretch",
                   }}
                   PlaceholderContent={<ActivityIndicator />}
                 />
               </TouchableOpacity>
             );
           })}
+        {movies.movies.Search && movies.movies.Search.length ? (
+          <Text style={{ color: "white", fontSize: 20, marginBottom: 10 }}>
+            Hey this is the end
+          </Text>
+        ) : null}
+
         {movies.movies.Response == "False" ? (
           <Text style={styles.error}>Hey we didn't found anything</Text>
         ) : null}
       </ScrollView>
+      <FlashMessage
+        position="bottom"
+        animated={true}
+        autoHide={true}
+        duration={1500}
+      />
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   root: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
     height: "100%",
     backgroundColor: "black",
   },
@@ -101,12 +147,16 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  inputNone: {
+    marginTop: 15,
+  },
   inputUser: {
     marginTop: 15,
-    justifyContent: "space-between",
+
     color: "white",
   },
   input: {
+    marginTop: 15,
     color: "white",
   },
   icon: {
