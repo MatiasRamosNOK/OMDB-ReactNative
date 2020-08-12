@@ -17,18 +17,18 @@ import {
   Content,
 } from "native-base";
 import { useDispatch, useSelector } from "react-redux";
+import StarRating from "react-native-star-rating";
 import { useEffect } from "react";
 import { getMovies } from "../redux/actions/movies";
-import { deleteFavorite } from "../redux/actions/login";
-import GestureRecognizer, {
-  swipeDirections,
-} from "react-native-swipe-gestures";
+import { deleteFavorite, setIDonServer } from "../redux/actions/login";
 const windowHeight = Dimensions.get("window").height;
 const windowWidth = Dimensions.get("window").width;
 export default function Movies({ navigation }) {
   const dispatch = useDispatch();
+  const [star, setStar] = React.useState(0);
   const data = useSelector((store) => store.login.data);
   const movies = useSelector((store) => store.movies.moviesUser);
+  const ratings = useSelector((store) => store.login.data.ratings);
   useEffect(() => {
     dispatch(getMovies(Array.from(new Set(data.moviesID))));
   }, [movies.length, data.moviesID.length]);
@@ -53,14 +53,37 @@ export default function Movies({ navigation }) {
                       source={{ uri: `${movie.Poster}` }}
                       style={{
                         width: windowWidth * 0.7,
-                        height: windowHeight * 0.7,
-                        resizeMode: "contain",
+                        height: windowHeight * 0.5,
+                        resizeMode: "stretch",
+                        marginBottom: 15,
                       }}
                     />
+                    {ratings.filter((x) => x.moviesID == movie.imdbID)
+                      .length ? (
+                      <StarRating
+                        disabled={false}
+                        maxStars={5}
+                        fullStarColor={"#E4AF18"}
+                        starSize={30}
+                        rating={
+                          ratings.length
+                            ? ratings.filter(
+                                (x) => x.moviesID == movie.imdbID
+                              )[0].number
+                            : 0
+                        }
+                        selectedStar={(rating) => {
+                          dispatch(
+                            setIDonServer(data.id, movie.imdbID, rating)
+                          );
+                        }}
+                      />
+                    ) : null}
+
                     <Button
                       block
                       danger
-                      style={{ marginBottom: 30 }}
+                      style={{ marginBottom: 20, marginTop: 10 }}
                       onPress={() => {
                         dispatch(deleteFavorite(data.id, movie.imdbID));
                       }}

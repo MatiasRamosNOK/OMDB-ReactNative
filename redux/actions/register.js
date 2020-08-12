@@ -1,5 +1,5 @@
 import axios from "axios";
-import { REGISTER_USER, SET_SUCCESFULL } from "../constants";
+import { REGISTER_USER, SET_SUCCESFULL, RESET_ERROR } from "../constants";
 
 const register = function (succesfull, error) {
   return {
@@ -9,6 +9,10 @@ const register = function (succesfull, error) {
   };
 };
 
+export const resetEmail = () => ({
+  type: RESET_ERROR,
+});
+
 const setSuccesfull = function () {
   return {
     type: SET_SUCCESFULL,
@@ -17,7 +21,6 @@ const setSuccesfull = function () {
 
 export const registerUser = function ({ email, password }) {
   return function (dispatch) {
-    console.log("Entro al dispatch con", email, password);
     axios
       .post("https://omdb-reactnative.herokuapp.com/users/register", {
         email: email,
@@ -25,12 +28,10 @@ export const registerUser = function ({ email, password }) {
       })
       .then(function (response) {
         if (response.status == 200) {
-          console.log("Entro al if con:", response);
           dispatch(register(true, null));
         }
       })
       .catch(function (error) {
-        console.log("ENtro al error con ", error);
         dispatch(register(false, "EmailUsed"));
       });
   };

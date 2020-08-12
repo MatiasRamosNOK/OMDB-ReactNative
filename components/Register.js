@@ -2,27 +2,15 @@ import React, { useEffect } from "react";
 import background from "../assets/register.jpg";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  ActivityIndicator,
-  Keyboard,
   Dimensions,
   Alert,
   ImageBackground,
+  ActivityIndicator,
 } from "react-native";
-import {
-  StyleSheet,
-  View,
-  Text,
-  ScrollView,
-  SafeAreaView,
-  Image,
-} from "react-native";
-import Icon from "react-native-vector-icons/FontAwesome";
-import { Button } from "react-native-elements";
+import { StyleSheet, View, Text } from "react-native";
 import { Input } from "react-native-elements";
-import { Spinner } from "native-base";
-import { registerUser } from "../redux/actions/register";
+import { registerUser, resetEmail } from "../redux/actions/register";
 import GradientButton from "react-native-gradient-buttons";
-const windowHeight = Dimensions.get("window").height;
 const windowWidth = Dimensions.get("window").width;
 
 export default function Login({ navigation }) {
@@ -31,8 +19,11 @@ export default function Login({ navigation }) {
   console.log("Fail", failRegistration, " Success:", succesfulRegister);
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [passwordTwo, setPasswordTwo] = React.useState("");
   const [waiting, setWaiting] = React.useState(false);
   const [errorEmail, setErrorEmail] = React.useState("");
+  const passwordInput = React.createRef();
+  const passwordInputTwo = React.createRef();
   const dispatch = useDispatch();
   const twoButtonsAlert = () => {
     Alert.alert(
@@ -61,14 +52,27 @@ export default function Login({ navigation }) {
     );
   };
 
+  const passwordAlertTwo = () => {
+    Alert.alert(
+      "Password",
+      "Please write your password again",
+      [{ text: "OK", onPress: () => console.log("OK Pressed") }],
+      { cancelable: false }
+    );
+  };
+
   const checkData = () => {
     console.log("Entro a checkData");
-    if (email == "" && password == "") {
+    if (email == "" && password == "" && passwordTwo == "") {
       return twoButtonsAlert();
     } else if (email == "") {
       return emailAlert();
     } else if (password == "") {
       return passwordAlert();
+    } else if (password != passwordTwo) {
+      passwordInput.current.clear();
+      passwordInputTwo.current.clear();
+      return passwordAlertTwo();
     } else if (
       !email.includes("@") ||
       !email.slice(email.indexOf("@"), email.length).includes(".")
@@ -89,18 +93,17 @@ export default function Login({ navigation }) {
       setErrorEmail("Email already in use");
     }
     if (succesfulRegister) {
-      console.log("Entro al if afuera del useEffect2");
       setWaiting(false);
       navigation.navigate("Login");
     }
-  }, [succesfulRegister, failRegistration]);
+  }, [succesfulRegister, failRegistration, errorEmail]);
 
   return (
     <View style={styles.root}>
       <ImageBackground source={background} style={styles.backgroundImage}>
         {waiting ? (
           <View>
-            <Spinner color="blue" />
+            <ActivityIndicator size="large" color="#49E418" />
           </View>
         ) : (
           <>
@@ -108,12 +111,16 @@ export default function Login({ navigation }) {
               <View style={styles.email}>
                 <Text style={styles.textEmail}>Email</Text>
                 <Input
+                  onPress={() => {
+                    dispatch(resetEmail());
+                  }}
                   placeholderTextColor={"gray"}
                   placeholder="abc@example.com"
                   leftIcon={{
                     type: "font-awesome",
                     name: "envelope",
                     color: "white",
+                    marginRight: 4,
                   }}
                   style={styles}
                   onChangeText={(value) => setEmail(value)}
@@ -131,11 +138,30 @@ export default function Login({ navigation }) {
                     type: "font-awesome",
                     name: "lock",
                     color: "white",
-                    marginRight: 4,
+                    marginRight: 5,
                   }}
                   inputStyle={styles.textInput}
                   onChangeText={(value) => setPassword(value)}
                   secureTextEntry={true}
+                  ref={passwordInput}
+                />
+              </View>
+              <View style={styles.password}>
+                <Text style={styles.textPassword}>Repet password</Text>
+                <Input
+                  placeholderTextColor={"gray"}
+                  placeholder="Som3th1n!gS3c-re"
+                  leftIcon={{
+                    marginLeft: 6,
+                    type: "font-awesome",
+                    name: "lock",
+                    color: "white",
+                    marginRight: 5,
+                  }}
+                  inputStyle={styles.textInput}
+                  onChangeText={(value) => setPasswordTwo(value)}
+                  secureTextEntry={true}
+                  ref={passwordInputTwo}
                 />
               </View>
               <View style={styles.contenedorBotones}></View>
@@ -144,8 +170,8 @@ export default function Login({ navigation }) {
               style={{ marginTop: 25 }}
               text="Register"
               textStyle={{ fontSize: 15 }}
-              gradientBegin="#217CA9"
-              gradientEnd="#130C67"
+              gradientBegin="#AF30CB"
+              gradientEnd="#CB3082"
               height={60}
               width={windowWidth * 0.8}
               radius={15}
@@ -169,6 +195,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "black",
   },
   container: {
     opacity: 0.9,
@@ -193,7 +220,6 @@ const styles = StyleSheet.create({
   email: {
     marginTop: 10,
     width: windowWidth * 0.9,
-    marginBottom: 10,
   },
   password: {
     width: windowWidth * 0.9,

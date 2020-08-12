@@ -1,13 +1,7 @@
 import React, { useEffect } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
-import {
-  Text,
-  View,
-  TouchableOpacity,
-  StyleSheet,
-  Dimensions,
-} from "react-native";
+import { Text, View, StyleSheet } from "react-native";
 import {
   Button,
   Footer,
@@ -15,18 +9,8 @@ import {
   Icon,
   Container,
   Content,
-  Tab,
-  Tabs,
-  TabHeading,
 } from "native-base";
-import { Image } from "react-native-elements";
 import { getMovies } from "../redux/actions/movies";
-import { ScrollView } from "react-native-gesture-handler";
-import { deleteFavorite } from "../redux/actions/login";
-import GestureRecognizer, {
-  swipeDirections,
-} from "react-native-swipe-gestures";
-const windowHeight = Dimensions.get("window").height;
 export default function User({ navigation }) {
   const data = useSelector((store) => store.login.data);
   const movies = useSelector((store) => store.movies.moviesUser);

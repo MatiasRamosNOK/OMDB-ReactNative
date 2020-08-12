@@ -1,18 +1,15 @@
 import React, { useEffect } from "react";
-import * as Animatable from "react-native-animatable";
 import { useDispatch, useSelector } from "react-redux";
 import {
   StyleSheet,
-  View,
   Text,
   SafeAreaView,
   ScrollView,
   TouchableOpacity,
   Dimensions,
-  Button,
 } from "react-native";
 import FlashMessage from "react-native-flash-message";
-import { showMessage, hideMessage } from "react-native-flash-message";
+import { showMessage } from "react-native-flash-message";
 import { ActivityIndicator, Keyboard } from "react-native";
 import { Image, Icon } from "react-native-elements";
 import { Input } from "react-native-elements";
@@ -20,27 +17,16 @@ import { fetchMovies, setIDMovie } from "../redux/actions/movies";
 const windowHeight = Dimensions.get("window").height;
 const windowWidth = Dimensions.get("window").width;
 export default function Main({ navigation }) {
-  const store = useSelector((store) => store);
   const login = useSelector((store) => store.login.succesfull);
   const movies = useSelector((store) => store.movies);
   const [showWelcome, setShowWelcome] = React.useState(true);
   const [name, setName] = React.useState("");
-  const [hideInput, setHideInput] = React.useState(null);
-  const [animationEnd, setAnimationEnd] = React.useState(null);
+
   const dispatch = useDispatch();
   const lookInfo = () => {
     if (name != "") {
       dispatch(fetchMovies(name));
       Keyboard.dismiss();
-    }
-  };
-
-  const scrollStart = (e) => {
-    if (e.nativeEvent.contentOffset.y > 100) {
-      setHideInput(true);
-    }
-    if (e.nativeEvent.contentOffset.y <= 100) {
-      setHideInput(false);
     }
   };
 
@@ -65,10 +51,7 @@ export default function Main({ navigation }) {
 
   return (
     <SafeAreaView style={styles.root}>
-      <ScrollView
-        contentContainerStyle={styles.containerImages}
-        onScroll={scrollStart}
-      >
+      <ScrollView contentContainerStyle={styles.containerImages}>
         <Input
           onSubmitEditing={() => {
             if (name != "") {
@@ -98,7 +81,7 @@ export default function Main({ navigation }) {
                   source={{ uri: elem.Poster }}
                   style={{
                     width: windowWidth * 0.7,
-                    height: windowHeight * 0.6,
+                    height: windowHeight * 0.5,
                     marginBottom: 50,
                     resizeMode: "stretch",
                   }}

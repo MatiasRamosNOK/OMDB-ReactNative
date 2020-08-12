@@ -5,6 +5,7 @@ import {
   ADD_MOVIE_FAVORITE,
   REMOVE_MOVIE,
   RESET_SUCCESFULL,
+  ADD_STAR_MOVIE,
 } from "../constants";
 import { setSuccesfullNull } from "./register";
 
@@ -41,8 +42,29 @@ const addToFavorite = function (data) {
     data: data,
   };
 };
+
+const addStar = function (data) {
+  return {
+    type: ADD_STAR_MOVIE,
+    data,
+  };
+};
+
+export const setIDonServer = function (idUser, idMovie, rating) {
+  return function (dispatch) {
+    axios
+      .post(
+        `https://omdb-reactnative.herokuapp.com/users/${idUser}/rating/${idMovie}/${rating}`,
+        {}
+      )
+      .then((resp) => {
+        if (resp.status == 200) {
+          dispatch(addStar(resp.data));
+        }
+      });
+  };
+};
 export const addFavorite = function (idUser, idMovie) {
-  console.log("ID user:", idUser, " ID movie:", idMovie);
   return function (dispatch) {
     axios
       .post(
@@ -50,9 +72,7 @@ export const addFavorite = function (idUser, idMovie) {
         {}
       )
       .then(function (response) {
-        console.log("REspuesta action favorite:", response);
         if (response.status == 200) {
-          console.log("La data es:", response.data);
           dispatch(addToFavorite(response.data));
         }
       })
@@ -77,7 +97,6 @@ export const deleteFavorite = function (idUser, idMovie) {
         }
       )
       .then((resp) => {
-        console.log("La respuesta es:", resp);
         dispatch(deleteData(resp.data));
       })
       .catch((err) => {
@@ -87,21 +106,17 @@ export const deleteFavorite = function (idUser, idMovie) {
 };
 export const logginUser = function ({ email, password }) {
   return function (dispatch) {
-    console.log("Entro al dispatch con", email, password);
     axios
       .post("https://omdb-reactnative.herokuapp.com/users/login", {
         email: email,
         password: password,
       })
       .then(function (response) {
-        console.log("REsponde es:", response);
         if (response.status == 200) {
-          console.log("Data en action creator:", response.data);
           dispatch(login(response.data, true));
         }
       })
       .catch(function (error) {
-        console.log("Si hay un error:", error);
         dispatch(login({ moviesID: [] }, false));
       });
   };

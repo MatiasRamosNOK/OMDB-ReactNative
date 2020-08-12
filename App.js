@@ -1,6 +1,6 @@
 import "react-native-gesture-handler";
 import React from "react";
-import { Provider, useDispatch } from "react-redux";
+import { Provider } from "react-redux";
 import storeConfiguration from "./redux/store";
 import Main from "./components/Main";
 import Single from "./components/Single";
@@ -10,9 +10,7 @@ import User from "./components/User";
 import Movies from "./components/Movies";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { Icon } from "native-base";
 import { enableScreens } from "react-native-screens";
-import { logoutUser } from "./redux/actions/login";
 import Logout from "./components/Logout";
 import WhereTo from "./components/WhereTo";
 enableScreens();

@@ -10,9 +10,9 @@ import {
   SafeAreaView,
   Image,
 } from "react-native";
-import { fetchMovie, resetMovie } from "../redux/actions/movies";
+import { fetchMovie } from "../redux/actions/movies";
 import { addFavorite } from "../redux/actions/login";
-import { ActivityIndicator, Keyboard, Dimensions } from "react-native";
+import { ActivityIndicator, Dimensions } from "react-native";
 const windowHeight = Dimensions.get("window").height;
 const windowWidth = Dimensions.get("window").width;
 export default function Single() {

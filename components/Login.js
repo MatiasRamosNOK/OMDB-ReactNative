@@ -1,26 +1,13 @@
 import React, { useEffect } from "react";
 import background from "../assets/login.jpg";
-import { ActivityIndicator, Keyboard, Dimensions, Alert } from "react-native";
-import {
-  StyleSheet,
-  View,
-  Text,
-  ScrollView,
-  SafeAreaView,
-  Image,
-  ImageBackground,
-} from "react-native";
+import { ActivityIndicator, Dimensions, Alert } from "react-native";
+import { StyleSheet, View, Text, ImageBackground } from "react-native";
 import { setSuccesfullNull } from "../redux/actions/register";
-import { Spinner } from "native-base";
-import Icon from "react-native-vector-icons/FontAwesome";
 import GradientButton from "react-native-gradient-buttons";
-import { Button } from "react-native-elements";
 import { Input } from "react-native-elements";
 import { useSelector, useDispatch } from "react-redux";
 import { logginUser } from "../redux/actions/login";
-import { set } from "react-native-reanimated";
 import { resetSuccesfull } from "../redux/actions/login";
-const windowHeight = Dimensions.get("window").height;
 const windowWidth = Dimensions.get("window").width;
 export default function Login({ navigation }) {
   const succesfulRegister = useSelector((store) => store.register.succesfull);
@@ -107,7 +94,7 @@ export default function Login({ navigation }) {
       <ImageBackground source={background} style={styles.backgroundImage}>
         {waiting ? (
           <View>
-            <Spinner color="blue" />
+            <ActivityIndicator size="large" color="#49E418" />
           </View>
         ) : (
           <View>
@@ -168,16 +155,12 @@ export default function Login({ navigation }) {
                 onPressAction={() => checkData()}
               />
 
-              <Text style={{ color: "black", fontSize: 20, marginBottom: 10 }}>
-                or
-              </Text>
-
               <GradientButton
                 style={styles.button}
                 text="Register"
                 textStyle={{ fontSize: 20 }}
-                gradientBegin="#217CA9"
-                gradientEnd="#130C67"
+                gradientBegin="#AF30CB"
+                gradientEnd="#CB3082"
                 height={60}
                 width={windowWidth * 0.8}
                 radius={15}
@@ -228,6 +211,7 @@ const styles = StyleSheet.create({
     width: windowWidth * 0.9,
   },
   backgroundImage: {
+    backgroundColor: "black",
     flex: 1,
     width: windowWidth,
     justifyContent: "center",
