@@ -8,6 +8,17 @@ import {
   TouchableOpacity,
   Dimensions,
 } from "react-native";
+import {
+  BallIndicator,
+  BarIndicator,
+  DotIndicator,
+  MaterialIndicator,
+  PacmanIndicator,
+  PulseIndicator,
+  SkypeIndicator,
+  UIActivityIndicator,
+  WaveIndicator,
+} from "react-native-indicators";
 import FlashMessage from "react-native-flash-message";
 import { showMessage } from "react-native-flash-message";
 import { ActivityIndicator, Keyboard } from "react-native";
@@ -59,7 +70,7 @@ export default function Main({ navigation }) {
             }
           }}
           placeholderTextColor={"gray"}
-          placeholder="Movie"
+          placeholder="Movie name..."
           onChange={(e) => {
             setName(e.nativeEvent.text);
           }}
@@ -81,11 +92,12 @@ export default function Main({ navigation }) {
                   source={{ uri: elem.Poster }}
                   style={{
                     width: windowWidth * 0.7,
-                    height: windowHeight * 0.5,
+                    height: windowHeight * 0.6,
                     marginBottom: 50,
                     resizeMode: "stretch",
+                    backgroundColor: "transparent",
                   }}
-                  PlaceholderContent={<ActivityIndicator />}
+                  PlaceholderContent={<DotIndicator color={"white"} />}
                 />
               </TouchableOpacity>
             );

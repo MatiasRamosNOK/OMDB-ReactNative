@@ -97,18 +97,18 @@ export default function Movies({ navigation }) {
         </ScrollView>
       </Content>
       <Footer>
-        <FooterTab>
+        <FooterTab style={styles.footerTAB}>
           <Button
             vertical
             onPress={() => {
               navigation.navigate("User");
             }}
           >
-            <Icon name="person" />
+            <Icon name="person" style={{ color: "black" }} />
             <Text style={styles.text}>Profile</Text>
           </Button>
-          <Button vertical active>
-            <Icon active name="easel" />
+          <Button vertical>
+            <Icon active name="easel" style={{ color: "blue" }} />
             <Text style={styles.text}>Movies</Text>
           </Button>
         </FooterTab>
@@ -124,6 +124,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "black",
     marginTop: 20,
+  },
+  footerTAB: {
+    backgroundColor: "white",
   },
   container: {
     backgroundColor: "black",
@@ -142,7 +145,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   text: {
-    color: "white",
+    color: "black",
   },
   empty: {
     flex: 1,

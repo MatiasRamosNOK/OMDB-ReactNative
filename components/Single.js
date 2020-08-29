@@ -1,7 +1,17 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Spinner, Button } from "native-base";
-
+import { Button } from "native-base";
+import {
+  BallIndicator,
+  BarIndicator,
+  DotIndicator,
+  MaterialIndicator,
+  PacmanIndicator,
+  PulseIndicator,
+  SkypeIndicator,
+  UIActivityIndicator,
+  WaveIndicator,
+} from "react-native-indicators";
 import {
   StyleSheet,
   View,
@@ -13,9 +23,11 @@ import {
 import { fetchMovie } from "../redux/actions/movies";
 import { addFavorite } from "../redux/actions/login";
 import { ActivityIndicator, Dimensions } from "react-native";
+
 const windowHeight = Dimensions.get("window").height;
 const windowWidth = Dimensions.get("window").width;
 export default function Single() {
+  const [waitingFav, setWaitingFav] = React.useState(false);
   const IDmovie = useSelector((store) => store.movies.id);
   const movie = useSelector((store) => store.movies.movie);
   const loginStatus = useSelector((store) => store.login.succesfull);
@@ -42,21 +54,32 @@ export default function Single() {
               Object.keys(dataUser).includes("moviesID") &&
               !dataUser.moviesID.includes(movie.imdbID) ? (
                 <View style={styles.buttonContainer}>
-                  <Button
-                    info
-                    full
-                    onPress={() => {
-                      dispatch(addFavorite(dataUser.id, movie.imdbID));
-                    }}
-                  >
-                    <Text style={styles.textButton}> Add to favorite </Text>
-                  </Button>
+                  {!waitingFav ? (
+                    <Button
+                      block
+                      rounded
+                      info
+                      style={{ width: "80%" }}
+                      onPress={() => {
+                        setWaitingFav(true);
+                        dispatch(addFavorite(dataUser.id, movie.imdbID));
+                      }}
+                    >
+                      <Text style={styles.textButton}> Add to favorite </Text>
+                    </Button>
+                  ) : (
+                    <MaterialIndicator
+                      color={"green"}
+                      trackWidth={2}
+                      size={50}
+                    />
+                  )}
                 </View>
               ) : null}
 
               {dataUser.moviesID.includes(movie.imdbID) ? (
                 <View style={styles.buttonContainer}>
-                  <Button full success>
+                  <Button block rounded style={{ width: "80%" }} success>
                     <Text style={styles.textButton}>Success</Text>
                   </Button>
                 </View>
@@ -75,7 +98,12 @@ export default function Single() {
             </View>
           ) : (
             <View style={styles.waitingContainer}>
-              <Spinner color="blue" />
+              <WaveIndicator
+                color={"rgb(38,181,200)"}
+                size={60}
+                count={5}
+                waveMode={"outline"}
+              />
             </View>
           )}
         </View>
@@ -102,17 +130,18 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     width: windowWidth / 2,
+    display: "flex",
+    flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 10,
-    flex: 1,
   },
   rootContainer: {
     height: "100%",
     backgroundColor: "black",
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 15,
+    marginTop: 25,
   },
   infoText: {
     justifyContent: "flex-start",

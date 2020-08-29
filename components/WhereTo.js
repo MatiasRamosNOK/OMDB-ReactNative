@@ -8,7 +8,7 @@ export default function whereTo() {
   return (
     <Icon
       name="person"
-      style={{ marginRight: 10 }}
+      style={{ marginRight: 18 }}
       onPress={(e) => {
         if (succesfull) {
           navigation.navigate("User");

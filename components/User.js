@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-
 import { useDispatch, useSelector } from "react-redux";
 import { Text, View, StyleSheet } from "react-native";
 import {
@@ -12,6 +11,7 @@ import {
 } from "native-base";
 import { getMovies } from "../redux/actions/movies";
 export default function User({ navigation }) {
+  const [defaultButton, setDefaultButton] = React.useState("profile");
   const data = useSelector((store) => store.login.data);
   const movies = useSelector((store) => store.movies.moviesUser);
   const dispatch = useDispatch();
@@ -30,19 +30,25 @@ export default function User({ navigation }) {
         </View>
       </Content>
 
-      <Footer>
+      <Footer style={styles.footer}>
         <FooterTab style={styles.footerTAB}>
-          <Button vertical active>
-            <Icon name="person" />
+          <Button
+            vertical
+            onPress={() => {
+              setDefaultButton("profile");
+            }}
+          >
+            <Icon name="person" style={{ color: "blue" }} />
             <Text style={styles.text}>Profile</Text>
           </Button>
           <Button
             vertical
             onPress={() => {
               navigation.navigate("Movies");
+              setDefaultButton("movies");
             }}
           >
-            <Icon active name="easel" />
+            <Icon name="easel" style={{ color: "black" }} />
             <Text style={styles.text}>Movies</Text>
           </Button>
         </FooterTab>
@@ -60,7 +66,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   footerTAB: {
-    color: "red",
+    backgroundColor: "white",
   },
   containerText: {
     flex: 1,
@@ -74,7 +80,7 @@ const styles = StyleSheet.create({
     color: "white",
   },
   text: {
-    color: "white",
+    color: "black",
   },
   bottom: {
     flex: 1,
